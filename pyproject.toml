@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "demlabs"
+version = "0.1.0"
+description = ""
+authors = ["Pavel"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.11.9"
+fastapi = {extras = ["all"], version = "^0.111.0"}
+dependency-injector = "^4.41.0"
+pydantic-settings = "^2.3.1"
+sqlalchemy = "^2.0.30"
+alembic = "^1.13.1"
+phonenumbers = "^8.13.38"
+asyncpg = "^0.29.0"
+psycopg2-binary = "^2.9.9"
+returns = "^0.22.0"
+https://pyjwt.readthedocs.io/en/stable/usage.html#encoding-decoding-tokens-with-rs256-rsa = {extras = ["crypto"], version = "^2.8.0"}
+python-multipart = "^0.0.9"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

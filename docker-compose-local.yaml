@@ -1,0 +1,19 @@
+services:
+  db:
+    container_name: "db-demlabs-shop"
+    image: postgres
+    env_file:
+      - .env.local
+    ports:
+      - 5533:5432
+
+
+
+
+
+
+
+
+
+
+
