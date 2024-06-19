@@ -12,7 +12,7 @@ from app.core.db.base import Database
 from app.core.repository.schemas_types import (
     ModelType,
     SchemaType,
-    CreateSchemaType, GetSchemaType,
+    CreateSchemaType,
 )
 
 
@@ -52,14 +52,14 @@ class BaseAlchemyRepository:
             is_serialize: bool = True,
     ) -> ModelType:
         """Возвращает объект модели по его идентификатору."""
-        stmt = (
+        query = (
             select(self.model)
             .where(self.model.id == instance_id)
         )
 
         async with self._db.get_session() as session:
             try:
-                db_result = await session.execute(stmt)
+                db_result = await session.execute(query)
                 instance = db_result.scalar_one()
             except SQLAlchemyError as e:
                 raise e  # type: ignore
@@ -67,11 +67,11 @@ class BaseAlchemyRepository:
             return self.serialize(instance) if is_serialize else instance
 
     async def get_list(self, is_serialize: bool = True, **kwargs: Any) -> ResultE[Iterable[ModelType]]:
-        stmt = select(self.model)
+        query = select(self.model)
 
         async with self._db.get_session() as session:
             try:
-                db_result = await session.execute(stmt)
+                db_result = await session.execute(query)
                 instances = db_result.scalars()
             except SQLAlchemyError as e:
                 raise e

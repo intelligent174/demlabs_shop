@@ -1,19 +1,14 @@
-from fastapi import (
-    APIRouter,
-    FastAPI,
-)
+from fastapi import FastAPI
 
 from app.containers.api.wires import (
     APP_CONTAINER_MODULES,
     wiring,
 )
-from app.views import root_router
-
-
-def get_router() -> APIRouter:
-    router = APIRouter()
-    router.include_router(root_router)
-    return router
+from app.auth.router import router as auth_router
+from app.categories.router import router as router_category
+from app.carts.router import router as cart_router
+from app.products.router import router as router_product
+from app.registrations.router import router as registration_router
 
 
 def create_app() -> FastAPI:
@@ -22,7 +17,10 @@ def create_app() -> FastAPI:
     app = app_container.app_factory()
 
     # Router...
-    router = get_router()
-    app.include_router(router)
+    app.include_router(registration_router)
+    app.include_router(auth_router)
+    app.include_router(router_category)
+    app.include_router(router_product)
+    app.include_router(cart_router)
 
     return app

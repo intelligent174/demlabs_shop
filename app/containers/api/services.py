@@ -1,13 +1,13 @@
 from dependency_injector import containers, providers
 
-from app.services.auth import AuthService
-from app.services.carts import CartService
-from app.services.categories import CategoryService
-from app.services.product import ProductService
-from app.services.registration import RegistrationService
-from app.services.jwt import JWTService
-from app.services.user import UserService
-from app.services.password import PasswordService
+from app.carts.service import CartService
+from app.auth.service import AuthService
+from app.categories.service import CategoryService
+from app.products.service import ProductService
+from app.registrations.service import RegistrationService
+from app.auth.utils.jwt import JWTService
+from app.users.service import UserService
+from app.users.utils.password import PasswordService
 
 __all__ = [
     'ServiceContainer',

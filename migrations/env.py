@@ -1,9 +1,6 @@
 import asyncio
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-
 from alembic import context
 
 from app.core.configs import AsyncpgDbConfigSchema
@@ -25,8 +22,6 @@ fileConfig(config.config_file_name)
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-# from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
 target_metadata = Base.metadata
 
 
@@ -48,17 +43,6 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    # url = config.get_main_option("sqlalchemy.url")
-    # context.configure(
-    #     url=url,
-    #     target_metadata=target_metadata,
-    #     literal_binds=True,
-    #     dialect_opts={"paramstyle": "named"},
-    # )
-    #
-    # with context.begin_transaction():
-    #     context.run_migrations()
-
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
@@ -71,7 +55,7 @@ def run_migrations_offline() -> None:
     with context.begin_transaction():
         context.run_migrations()
 
-
+# TODO: надо разобраться как здесь лучше сделать?
 def render_item(type_: str, col, autogen_context) -> str | bool:
     if col is None:
         return False
@@ -129,23 +113,8 @@ async def run_migrations_online() -> None:
     async with connectable.connect() as connection:
         await connection.run_sync(do_run_migrations)
 
-    # connectable = engine_from_config(
-    #     config.get_section(config.config_ini_section, {}),
-    #     prefix="sqlalchemy.",
-    #     poolclass=pool.NullPool,
-    # )
-    #
-    # with connectable.connect() as connection:
-    #     context.configure(
-    #         connection=connection, target_metadata=target_metadata
-    #     )
-    #
-    #     with context.begin_transaction():
-    #         context.run_migrations()
-
 
 if context.is_offline_mode():
     run_migrations_offline()
 else:
     asyncio.run(run_migrations_online())
-    # run_migrations_online()

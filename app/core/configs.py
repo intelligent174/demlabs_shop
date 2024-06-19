@@ -1,5 +1,4 @@
 from datetime import timedelta
-from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -12,7 +11,7 @@ from pydantic_core.core_schema import ValidationInfo
 from pydantic_settings import BaseSettings
 
 __all__ = [
-    'get_config',
+    'settings',
 ]
 
 QUANTITY_PATH_ANCESTORS = 2
@@ -22,7 +21,7 @@ BASE_DIR = Path(__file__).parents[QUANTITY_PATH_ANCESTORS]
 class AppConfigSchema(BaseSettings):
     TITLE: str = Field(
         default='Demlabs Shop Service',
-        description='Application name',
+        description='The Demlabs store is opening soon',
     )
     DEBUG: bool = Field(default=True)
 
@@ -125,6 +124,4 @@ class ConfigSchema(BaseSettings):
     jwt: JWTConfigSchema = JWTConfigSchema()
 
 
-@lru_cache
-def get_config() -> ConfigSchema:
-    return ConfigSchema()
+settings = ConfigSchema()

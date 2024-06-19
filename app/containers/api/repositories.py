@@ -1,10 +1,10 @@
 from dependency_injector import containers
 from dependency_injector import providers
 
-from app.repositories.carts import CartRepository
-from app.repositories.categories import CategoryRepository
-from app.repositories.products import ProductRepository
-from app.repositories.users import UserRepository
+from app.carts.repository import CartRepository
+from app.categories.repository import CategoryRepository
+from app.products.repository import ProductRepository
+from app.users.repository import UserRepository
 
 
 class RepositoryContainer(containers.DeclarativeContainer):

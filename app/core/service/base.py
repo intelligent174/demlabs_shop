@@ -1,7 +1,8 @@
 from typing import (
     Any,
     Generic,
-    TypeVar, Iterable,
+    TypeVar,
+    Iterable,
 )
 from uuid import UUID
 
@@ -19,7 +20,6 @@ from app.core.repository.schemas_types import (
     SchemaType,
     ModelType,
     CreateSchemaType,
-    GetSchemaType,
 )
 
 __all__ = [

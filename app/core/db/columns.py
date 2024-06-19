@@ -1,10 +1,12 @@
+from datetime import datetime
+
 from sqlalchemy import (
-    Column,
     DateTime,
     Integer,
     func,
 )
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import Mapped, mapped_column
 
 __all__ = [
     'CreatableBy',
@@ -17,15 +19,15 @@ __all__ = [
 
 
 class CreatableBy:
-    created_by = Column(UUID, nullable=True)
+    created_by: Mapped[UUID] = mapped_column(UUID, nullable=True)
 
 
 class UpdatableBy:
-    updated_by = Column(UUID, nullable=True)
+    updated_by: Mapped[UUID] = mapped_column(UUID, nullable=True)
 
 
 class Creatable:
-    created_at = Column(
+    created_at: Mapped[datetime] = mapped_column(
         DateTime,
         server_default=func.now(),
         nullable=False,
@@ -33,7 +35,7 @@ class Creatable:
 
 
 class Updatable:
-    updated_at = Column(
+    updated_at: Mapped[datetime] = mapped_column(
         DateTime,
         server_default=func.now(),
         onupdate=func.now(),
@@ -42,8 +44,8 @@ class Updatable:
 
 
 class SoftDeletable:
-    deleted_at = Column(DateTime, nullable=True)
+    deleted_at: Mapped[datetime] = mapped_column(DateTime, nullable=True)
 
 
 class TimeZoneOffset:
-    utc_offset = Column(Integer, nullable=True)
+    utc_offset: Mapped[int] = mapped_column(Integer, nullable=True)

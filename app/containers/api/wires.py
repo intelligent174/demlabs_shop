@@ -6,7 +6,7 @@ from app.containers.api.app import AppContainer
 from app.containers.api.gateways import GatewayContainer
 from app.containers.api.repositories import RepositoryContainer
 from app.containers.api.services import ServiceContainer
-from app.core.configs import get_config
+from app.core.configs import settings
 
 __all__ = [
     'APP_CONTAINER_MODULES',
@@ -14,20 +14,18 @@ __all__ = [
 ]
 
 APP_CONTAINER_MODULES = [
-    'app.views.auth',
-    'app.views.carts',
-    'app.views.categories',
-    'app.views.products',
-    'app.views.registrations',
+    'app.auth.router',
+    'app.categories.router',
+    'app.carts.router',
+    'app.products.router',
+    'app.registrations.router',
 ]
 
 
 def wiring(modules: Iterable[str]) -> dict[str, DeclarativeContainer]:
-    config = get_config()
-
     # Init...
     app_container = AppContainer()
-    app_container.config.from_dict(config.model_dump())
+    app_container.config.from_dict(settings.dict())
     app_container.wire(modules=modules)
 
     gateways_container = GatewayContainer(

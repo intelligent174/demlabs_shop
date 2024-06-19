@@ -16,7 +16,7 @@ phonenumbers = "^8.13.38"
 asyncpg = "^0.29.0"
 psycopg2-binary = "^2.9.9"
 returns = "^0.22.0"
-https://pyjwt.readthedocs.io/en/stable/usage.html#encoding-decoding-tokens-with-rs256-rsa = {extras = ["crypto"], version = "^2.8.0"}
+pyjwt = {extras = ["crypto"], version = "^2.8.0"}
 python-multipart = "^0.0.9"
 
 
