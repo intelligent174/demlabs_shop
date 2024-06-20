@@ -1,0 +1,9 @@
+# Ide
+.idea
+
+# Secret
+certificates
+
+# Python
+__pycache__/
+*.py[cod]

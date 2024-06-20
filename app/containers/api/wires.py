@@ -6,7 +6,7 @@ from app.containers.api.app import AppContainer
 from app.containers.api.gateways import GatewayContainer
 from app.containers.api.repositories import RepositoryContainer
 from app.containers.api.services import ServiceContainer
-from app.core.configs import settings
+from app.config import settings
 
 __all__ = [
     'APP_CONTAINER_MODULES',

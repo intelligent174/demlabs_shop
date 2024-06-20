@@ -3,7 +3,7 @@ from logging.config import fileConfig
 
 from alembic import context
 
-from app.core.configs import AsyncpgDbConfigSchema
+from app.core.db.config import AsyncpgDbConfigSchema
 from app.core.db.models import Base
 from sqlalchemy.ext.asyncio import create_async_engine
 
@@ -54,6 +54,7 @@ def run_migrations_offline() -> None:
 
     with context.begin_transaction():
         context.run_migrations()
+
 
 # TODO: надо разобраться как здесь лучше сделать?
 def render_item(type_: str, col, autogen_context) -> str | bool:
