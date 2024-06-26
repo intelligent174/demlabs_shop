@@ -13,7 +13,6 @@ __all__ = [
     'BaseProductResponse',
     'ProductCreateResponse',
     'ProductOnCartResponse',
-    'ProductListResponse',
 ]
 
 
@@ -45,7 +44,3 @@ class ProductCreateResponse(BaseResponseModel, BaseProductResponse):
 
 class ProductOnCartResponse(BaseProductResponse):
     quantity: int
-
-
-class ProductListResponse(ConfigDictMixin):
-    products: list[BaseProductResponse]

@@ -1,5 +1,3 @@
-from typing import Iterable
-
 from pydantic import BaseModel
 
 from app.core.schemas.responses.common import (
@@ -10,7 +8,6 @@ from app.core.schemas.responses.common import (
 __all__ = [
     'CategoryCreateRequest',
     'CategoryCreateResponse',
-    'CategoryListResponse',
 ]
 
 
@@ -20,7 +17,3 @@ class CategoryCreateRequest(BaseModel):
 
 class CategoryCreateResponse(BaseResponseModel, ConfigDictMixin):
     title: str
-
-
-class CategoryListResponse(BaseModel):
-    categories: Iterable[CategoryCreateResponse]

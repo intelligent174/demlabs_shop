@@ -11,7 +11,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from app.core.db.base import Database
 from app.core.repository.schemas_types import (
     ModelType,
-    SchemaType,
+    BaseSchemaType,
     CreateSchemaType,
 )
 
@@ -82,8 +82,8 @@ class BaseAlchemyRepository:
     def serialize(
             cls,
             model_instance: ModelType,
-            schema: Type[SchemaType] | None = None
-    ) -> SchemaType:
+            schema: Type[BaseSchemaType] | None = None
+    ) -> BaseSchemaType:
         """Сериализует объект модели в объект переданной схемы."""
         schema = schema or cls.creation_schema
         return schema.model_validate(model_instance)
@@ -92,8 +92,8 @@ class BaseAlchemyRepository:
     def serialize_many(
             cls,
             model_instances: Iterable[ModelType],
-            schema: Type[SchemaType] | None = None
-    ) -> Iterable[SchemaType]:
+            schema: Type[BaseSchemaType] | None = None
+    ) -> Iterable[BaseSchemaType]:
         """Сериализует объекты модели в объекты переданной схемы."""
         return [
             cls.serialize(model_instance=model_instance, schema=schema)

@@ -17,6 +17,7 @@ from app.containers.api.services import ServiceContainer
 from app.registrations.schemas import RegisterUserRequest
 from app.users.schemas import UserCreateResponse
 from app.registrations.service import RegistrationService
+from app.utils.schemas import CustomJSONResponse
 
 name_prefix = 'registration'
 router = APIRouter(
@@ -28,16 +29,16 @@ router = APIRouter(
 @router.post(
     '/register_user/',
     name=f'{name_prefix}:register_user',
-    status_code=status.HTTP_201_CREATED,
+    response_model=UserCreateResponse,
 )
 @inject
 async def register_user(
         request_data: RegisterUserRequest,
         service: RegistrationService = Depends(Provide[ServiceContainer.registration_service]),
-) -> UserCreateResponse:
+) -> CustomJSONResponse:
     match await service.create_instance(data=request_data):
         case Success(user):
-            return user
+            return CustomJSONResponse(user, status_code=status.HTTP_201_CREATED)
         case Failure(PHONE_ALREADY_EXISTS):
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=PHONE_ALREADY_EXISTS)
         case Failure(EMAIL_ALREADY_EXISTS):

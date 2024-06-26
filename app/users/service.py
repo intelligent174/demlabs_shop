@@ -9,7 +9,7 @@ from sqlalchemy.exc import NoResultFound
 
 from app.core.db.exceptions_types import CastViolationError
 from app.core.repository.schemas_types import (
-    SchemaType,
+    BaseSchemaType,
     ModelType,
 )
 from app.core.service.base import BaseCreateService
@@ -81,6 +81,6 @@ class UserService(BaseCreateService):
         except Exception as e:
             return Failure(str(e))
 
-    def serialize(self, model_instance: ModelType) -> SchemaType:
+    def serialize(self, model_instance: ModelType) -> BaseSchemaType:
         """Сериализует объекты модели в объекты схемы указанной в репозитории UserRepository"""
         return self.repository.serialize(model_instance)

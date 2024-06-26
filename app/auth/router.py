@@ -11,6 +11,7 @@ from app.auth.schemas import (
 )
 from app.users.schemas import UserCreateResponse
 from app.auth.service import AuthService
+from app.utils.schemas import CustomJSONResponse
 
 name_prefix = 'auth'
 router = APIRouter(
@@ -22,16 +23,16 @@ router = APIRouter(
 @router.post(
     '/login/',
     name=f'{name_prefix}:phone_login',
-    status_code=status.HTTP_200_OK,
+    response_model=AuthTokensPairResponse,
 )
 @inject
 async def login(
         service: AuthService = Depends(Provide[ServiceContainer.auth_service]),
         user: UserCreateResponse = Depends(CurrentUser()),
-) -> AuthTokensPairResponse:
+) -> CustomJSONResponse:
     match await service.login_phone(user=user):
         case Success(tokens_pair):
-            return tokens_pair
+            return CustomJSONResponse(tokens_pair, status_code=status.HTTP_200_OK)
         case _:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
 
@@ -39,16 +40,16 @@ async def login(
 @router.post(
     '/refresh/',
     name=f'{name_prefix}:refresh',
-    status_code=status.HTTP_200_OK,
+    response_model=AuthAccessTokenResponse,
 )
 @inject
 async def refresh_auth(
         user_id=Depends(CurrentToken(token_type='refresh')),
         auth_service: AuthService = Depends(Provide[ServiceContainer.auth_service]),
-) -> AuthAccessTokenResponse:
+) -> CustomJSONResponse:
     match await auth_service.refresh_auth(user_id=user_id):
         case Success(access_token):
-            return access_token
+            return CustomJSONResponse(access_token, status_code=status.HTTP_200_OK)
         case Failure(USER_NOT_FOUND):
             raise HTTPException(status_code=status.NOT_FOUND, detail=USER_NOT_FOUND)
         case _:

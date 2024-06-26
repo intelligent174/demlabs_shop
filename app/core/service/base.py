@@ -17,7 +17,7 @@ from sqlalchemy.exc import NoResultFound
 from app.core.db.exceptions_types import CastViolationError
 from app.core.repository.base import BaseAlchemyRepository
 from app.core.repository.schemas_types import (
-    SchemaType,
+    BaseSchemaType,
     ModelType,
     CreateSchemaType,
 )
@@ -57,7 +57,7 @@ class BaseCreateService(
     BaseService,
     Generic[
         ModelType,
-        SchemaType,
+        BaseSchemaType,
         CreateSchemaType,
     ],
 ):
@@ -69,7 +69,7 @@ class BaseCreateService(
             exclude_fields: set[str] | None = None,
             exclude_none: bool = False,
             **kwargs: Any,
-    ) -> SchemaType | ModelType:
+    ) -> BaseSchemaType | ModelType:
         kwargs.update(data.model_dump(
             exclude=exclude_fields,
             exclude_none=exclude_none,

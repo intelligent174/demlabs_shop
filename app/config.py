@@ -29,6 +29,7 @@ class AppConfigSchema(BaseSettings):
     )
 
 
+# TODO: переделать под Pydantic 2.
 class ConfigSchema(BaseSettings):
     app: AppConfigSchema = AppConfigSchema()
     db: AsyncpgDbConfigSchema = AsyncpgDbConfigSchema()
