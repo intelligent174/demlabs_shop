@@ -59,7 +59,7 @@ class DbConfigSchema(BaseSettings):
     def compute_dsn(
             cls,
             v: Any,
-            values: Any,
+            values: ValidationInfo,
             **kwargs: object,
     ) -> str:
         return PostgresDsn.build(  # type: ignore
