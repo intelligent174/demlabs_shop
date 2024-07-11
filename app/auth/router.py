@@ -1,8 +1,8 @@
-from dependency_injector.wiring import Provide, inject
+from dishka import FromDishka
+from dishka.integrations.fastapi import DishkaRoute
 from fastapi import APIRouter, Depends, status, HTTPException
 from returns.result import Success, Failure
 
-from app.containers.api.services import ServiceContainer
 from app.auth.utils.token_payload import CurrentToken
 from app.auth.utils.user_authentication import CurrentUser
 from app.auth.schemas import (
@@ -17,6 +17,7 @@ name_prefix = 'auth'
 router = APIRouter(
     prefix=f'/{name_prefix}',
     tags=[name_prefix],
+    route_class=DishkaRoute,
 )
 
 
@@ -25,9 +26,8 @@ router = APIRouter(
     name=f'{name_prefix}:phone_login',
     response_model=AuthTokensPairResponse,
 )
-@inject
 async def login(
-        service: AuthService = Depends(Provide[ServiceContainer.auth_service]),
+        service: FromDishka[AuthService],
         user: UserCreateResponse = Depends(CurrentUser()),
 ) -> CustomJSONResponse:
     match await service.login_phone(user=user):
@@ -42,12 +42,11 @@ async def login(
     name=f'{name_prefix}:refresh',
     response_model=AuthAccessTokenResponse,
 )
-@inject
 async def refresh_auth(
+        service: FromDishka[AuthService],
         user_id=Depends(CurrentToken(token_type='refresh')),
-        auth_service: AuthService = Depends(Provide[ServiceContainer.auth_service]),
 ) -> CustomJSONResponse:
-    match await auth_service.refresh_auth(user_id=user_id):
+    match await service.refresh_auth(user_id=user_id):
         case Success(access_token):
             return CustomJSONResponse(access_token, status_code=status.HTTP_200_OK)
         case Failure(USER_NOT_FOUND):

@@ -26,7 +26,7 @@ from app.auth.schemas import (
 from app.users.schemas import UserCreateResponse
 
 
-class JWTService:
+class JWTUtility:
     FIRST_ALGORITHM = 0
     ACCESS_TOKEN_TYPE = 'access'
     REFRESH_TOKEN_TYPE = 'refresh'

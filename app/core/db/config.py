@@ -12,11 +12,11 @@ from pydantic_settings import (
 )
 
 __all__ = [
-    'AsyncpgDbConfigSchema',
+    'AsyncpgDbSettings',
 ]
 
 
-class DbConfigSchema(BaseSettings):
+class DbSettings(BaseSettings):
     HOST: str = Field(
         default=...,
         description='Database host. Without end slash',
@@ -55,6 +55,7 @@ class DbConfigSchema(BaseSettings):
         env_prefix='DB_',
     )
 
+    # TODO: поискать другой способ формирования значения для свойства pydantic модели??
     @field_validator('DSN')
     def compute_dsn(
             cls,
@@ -72,7 +73,7 @@ class DbConfigSchema(BaseSettings):
         )
 
 
-class AsyncpgDbConfigSchema(DbConfigSchema):
+class AsyncpgDbSettings(DbSettings):
     DSN: str = Field(
         default='',
         description='Computed field',

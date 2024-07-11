@@ -16,6 +16,7 @@ from app.core.repository.schemas_types import (
 )
 
 
+# TODO: добавить GENERIC!
 class BaseAlchemyRepository:
     """Базовый класс репозитория для работы с SQLAlchemy"""
     model: Type[ModelType] = NotImplemented

@@ -2,18 +2,17 @@ from datetime import timedelta
 from pathlib import Path
 
 from pydantic import Field
-
 from pydantic_settings import BaseSettings
 
 __all__ = [
-    'JWTConfigSchema',
+    'JWTSettings',
 ]
 
 QUANTITY_PATH_ANCESTORS = 2
 BASE_DIR = Path(__file__).parents[QUANTITY_PATH_ANCESTORS]
 
 
-class JWTConfigSchema(BaseSettings):
+class JWTSettings(BaseSettings):
     PRIVATE_SECRET_KEY: Path = BASE_DIR / 'certificates' / 'jwt-private.pem'
     PUBLIC_SECRET_KEY: Path = BASE_DIR / 'certificates' / 'jwt-public.pem'
     ALGORITHMS: list[str] = Field(default=['RS256'])

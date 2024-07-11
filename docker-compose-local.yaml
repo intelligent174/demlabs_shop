@@ -1,25 +1,11 @@
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: demlabs_shop
-    command: [ "/app/docker/app.sh" ]
-    env_file:
-      - .env.docker
-    ports:
-      - 8000:8000
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
   db:
     image: postgres:16-alpine
     container_name: db_demlabs_shop
     restart: always
+#    restart: unless-stopped
     env_file:
-      - .env.docker
+      - .env.local
     ports:
       - 5533:5432
     volumes:
@@ -32,9 +18,11 @@ services:
   redis:
     image: redis
     container_name: redis_demlabs_shop
+#    command: redis-server --requirepass so_secret
     restart: always
+#    restart: unless-stopped
     env_file:
-      - .env.docker
+      - .env.local
     volumes:
       - redis-demlabs-shop:/data
     ports:

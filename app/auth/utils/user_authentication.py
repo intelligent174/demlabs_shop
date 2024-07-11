@@ -1,11 +1,8 @@
-from dependency_injector.wiring import (
-    inject,
-    Provide,
-)
+from dishka import FromDishka
+from dishka.integrations.fastapi import inject
 from fastapi import (
     HTTPException,
     Form,
-    Depends,
     status,
 )
 from pydantic import SecretStr
@@ -13,28 +10,26 @@ from returns.result import (
     Success,
     Failure,
 )
-
-from app.users.models import User
 from app.auth.exception_messages import INVALID_PASSWORD
 
-from app.containers.api.services import ServiceContainer
 from app.core.schemas.fields.phone_number import PhoneNumber
 from app.users.service import UserService
-from app.users.utils.password import PasswordService
+from app.users.utils.password import PasswordUtility
+from app.users.models import User
 
 
 class CurrentUser:
     @inject
     async def __call__(
             self,
+            user_service: FromDishka[UserService],
+            password_utility: FromDishka[PasswordUtility],
             phone: PhoneNumber = Form(),
             password: SecretStr = Form(),
-            user_service: UserService = Depends(Provide[ServiceContainer.user_service]),
-            password_service: PasswordService = Depends(Provide[ServiceContainer.password_service]),
     ) -> User:
         match await user_service.get_user_by_phone(phone):
             case Success(user):
-                if not password_service.validate_password(
+                if not password_utility.validate_password(
                         password=password.get_secret_value(),
                         password_hash=user.password_hash,
                         password_salt=user.password_salt,

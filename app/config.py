@@ -3,8 +3,9 @@ from pathlib import Path
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from app.auth.config import JWTConfigSchema
-from app.core.db.config import AsyncpgDbConfigSchema
+from app.auth.config import JWTSettings
+from app.core.cache.config import RedisSettings
+from app.core.db.config import AsyncpgDbSettings
 
 __all__ = [
     'settings',
@@ -14,7 +15,7 @@ QUANTITY_PATH_ANCESTORS = 2
 BASE_DIR = Path(__file__).parents[QUANTITY_PATH_ANCESTORS]
 
 
-class AppConfigSchema(BaseSettings):
+class AppSettings(BaseSettings):
     TITLE: str = Field(
         default='Demlabs Shop Service',
         description='The Demlabs store is opening soon',
@@ -30,10 +31,11 @@ class AppConfigSchema(BaseSettings):
 
 
 # TODO: переделать под Pydantic 2.
-class ConfigSchema(BaseSettings):
-    app: AppConfigSchema = AppConfigSchema()
-    db: AsyncpgDbConfigSchema = AsyncpgDbConfigSchema()
-    jwt: JWTConfigSchema = JWTConfigSchema()
+class Settings(BaseSettings):
+    app: AppSettings = AppSettings()
+    db: AsyncpgDbSettings = AsyncpgDbSettings()
+    jwt: JWTSettings = JWTSettings()
+    redis: RedisSettings = RedisSettings()
 
 
-settings = ConfigSchema()
+settings = Settings()

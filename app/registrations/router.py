@@ -1,10 +1,7 @@
-from dependency_injector.wiring import (
-    Provide,
-    inject,
-)
+from dishka import FromDishka
+from dishka.integrations.fastapi import DishkaRoute
 from fastapi import (
     APIRouter,
-    Depends,
     HTTPException,
     status,
 )
@@ -13,7 +10,6 @@ from returns.result import (
     Failure,
 )
 
-from app.containers.api.services import ServiceContainer
 from app.registrations.schemas import RegisterUserRequest
 from app.users.schemas import UserCreateResponse
 from app.registrations.service import RegistrationService
@@ -23,6 +19,7 @@ name_prefix = 'registration'
 router = APIRouter(
     prefix=f'/{name_prefix}',
     tags=[name_prefix],
+    route_class=DishkaRoute,
 )
 
 
@@ -31,10 +28,9 @@ router = APIRouter(
     name=f'{name_prefix}:register_user',
     response_model=UserCreateResponse,
 )
-@inject
 async def register_user(
+        service: FromDishka[RegistrationService],
         request_data: RegisterUserRequest,
-        service: RegistrationService = Depends(Provide[ServiceContainer.registration_service]),
 ) -> CustomJSONResponse:
     match await service.create_instance(data=request_data):
         case Success(user):

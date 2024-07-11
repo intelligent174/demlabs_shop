@@ -23,7 +23,7 @@ from app.users.exception_messages import (
 from app.core.schemas.fields.phone_number import PhoneNumber
 from app.registrations.schemas import RegisterUserRequest
 from app.users.schemas import UserCreateResponse
-from app.users.utils.password import PasswordService
+from app.users.utils.password import PasswordUtility
 
 __all__ = [
     'UserService',
@@ -37,9 +37,9 @@ class UserService(BaseCreateService):
         'NoResultFound': USER_NOT_FOUND,
     }
 
-    def __init__(self, repository: UserRepository, password_service: PasswordService) -> None:
+    def __init__(self, repository: UserRepository, password_utility: PasswordUtility) -> None:
         super().__init__(repository=repository)
-        self.password_service = password_service
+        self.password_utility = password_utility
 
     async def get_user_by_phone(self, phone: PhoneNumber) -> Maybe[User]:
         try:
@@ -64,7 +64,7 @@ class UserService(BaseCreateService):
             exclude_none=exclude_none,
         ))
 
-        password_hash, password_salt = self.password_service.generate_hash(
+        password_hash, password_salt = self.password_utility.generate_hash(
             password=data.password.get_secret_value()
         )
 

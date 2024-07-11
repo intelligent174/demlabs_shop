@@ -3,7 +3,7 @@ from logging.config import fileConfig
 
 from alembic import context
 
-from app.core.db.config import AsyncpgDbConfigSchema
+from app.core.db.config import AsyncpgDbSettings
 from app.core.db.models import Base
 from sqlalchemy.ext.asyncio import create_async_engine
 
@@ -109,7 +109,7 @@ async def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    connectable = create_async_engine(str(AsyncpgDbConfigSchema().DSN), future=True)
+    connectable = create_async_engine(str(AsyncpgDbSettings().DSN), future=True)
 
     async with connectable.connect() as connection:
         await connection.run_sync(do_run_migrations)

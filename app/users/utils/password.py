@@ -3,7 +3,7 @@ from hashlib import pbkdf2_hmac
 from typing import Iterable
 
 
-class PasswordService:
+class PasswordUtility:
     hashing_algorithm: str = f'sha256'
 
     def validate_password(

@@ -1,10 +1,8 @@
 from typing import List
 from uuid import UUID
 
-from dependency_injector.wiring import (
-    Provide,
-    inject,
-)
+from dishka import FromDishka
+from dishka.integrations.fastapi import DishkaRoute
 from fastapi import (
     APIRouter,
     Depends,
@@ -16,7 +14,6 @@ from returns.result import (
     Failure,
 )
 
-from app.containers.api.services import ServiceContainer
 from app.auth.utils.token_payload import CurrentToken
 from app.products.schemas import (
     ProductCreateRequest,
@@ -30,6 +27,7 @@ name_prefix = 'product'
 router = APIRouter(
     prefix=f'/{name_prefix}',
     tags=[name_prefix],
+    route_class=DishkaRoute,
 )
 
 
@@ -38,10 +36,9 @@ router = APIRouter(
     name=f'{name_prefix}:creating_products',
     response_model=ProductCreateResponse,
 )
-@inject
 async def create(
         request_data: ProductCreateRequest,
-        service: ProductService = Depends(Provide[ServiceContainer.product_service]),
+        service: FromDishka[ProductService],
         token_payload=Depends(CurrentToken()),
 ) -> CustomJSONResponse:
     match await service.create_instance(data=request_data):
@@ -58,10 +55,9 @@ async def create(
     name=f'{name_prefix}:getting_product',
     response_model=ProductCreateResponse,
 )
-@inject
 async def get(
         product_id: UUID,
-        service: ProductService = Depends(Provide[ServiceContainer.product_service]),
+        service: FromDishka[ProductService],
 ) -> CustomJSONResponse:
     match await service.get_by_id(product_id):
         case Success(product):
@@ -77,10 +73,9 @@ async def get(
     name=f'{name_prefix}:getting_products',
     response_model=List[BaseProductResponse],
 )
-@inject
 async def get_list(
         category_id: UUID,
-        service: ProductService = Depends(Provide[ServiceContainer.product_service]),
+        service: FromDishka[ProductService],
 ) -> CustomJSONResponse:
     match await service.get_list(category_id):
         case Success(products):

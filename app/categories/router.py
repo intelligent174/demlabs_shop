@@ -1,9 +1,7 @@
 from typing import List
 
-from dependency_injector.wiring import (
-    Provide,
-    inject,
-)
+from dishka import FromDishka
+from dishka.integrations.fastapi import DishkaRoute
 from fastapi import (
     APIRouter,
     Depends,
@@ -15,7 +13,6 @@ from returns.result import (
     Failure,
 )
 
-from app.containers.api.services import ServiceContainer
 from app.auth.utils.token_payload import CurrentToken
 from app.categories.schemas import (
     CategoryCreateRequest,
@@ -28,6 +25,7 @@ name_prefix = 'category'
 router = APIRouter(
     prefix=f'/{name_prefix}',
     tags=[name_prefix],
+    route_class=DishkaRoute,
 )
 
 
@@ -36,10 +34,9 @@ router = APIRouter(
     name=f'{name_prefix}:creating_categories',
     response_model=CategoryCreateResponse,
 )
-@inject
 async def create(
         request_data: CategoryCreateRequest,
-        service: CategoryService = Depends(Provide[ServiceContainer.category_service]),
+        service: FromDishka[CategoryService],
         token_payload=Depends(CurrentToken()),
 ) -> CustomJSONResponse:
     match await service.create_instance(data=request_data):
@@ -56,9 +53,8 @@ async def create(
     name=f'{name_prefix}:getting_categories',
     response_model=List[CategoryCreateResponse],
 )
-@inject
 async def get(
-        service: CategoryService = Depends(Provide[ServiceContainer.category_service]),
+        service: FromDishka[CategoryService],
 ) -> CustomJSONResponse:
     match await service.get_list():
         case Success(categories):
