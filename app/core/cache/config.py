@@ -1,5 +1,3 @@
-from typing import Any
-
 from pydantic import (
     Field,
     field_validator,
@@ -25,12 +23,12 @@ class RedisSettings(BaseSettings):
     DB: int = Field(default=0)
 
     DSN: str = Field(
-        default='',
+        default='redis://localhost:6379//1',
         description='Computed field',
     )
 
     model_config = SettingsConfigDict(
-        env_file='.env.docker',
+        env_file='.env',
         env_file_encoding='utf-8',
         extra='ignore',
         env_prefix='REDIS_',
@@ -39,14 +37,14 @@ class RedisSettings(BaseSettings):
     @field_validator('DSN')
     def compute_dsn(
             cls,
-            v: Any,
+            v: str,
             values: ValidationInfo,
             **kwargs: object,
-    ) -> str:
+    ) -> RedisDsn:
         return RedisDsn.build(  # type: ignore
             scheme='redis',
             password=values.data['PASSWORD'],
             host=values.data['HOST'],
             port=values.data['PORT'],
-            path=f"/{values.data['DB']}",
+            path=f'/{values.data['DB']}',
         )

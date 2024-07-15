@@ -6,6 +6,7 @@ from returns.result import (
     Result,
 )
 
+from app.core.repository.base import BaseAlchemyRepository
 from app.core.service.base import BaseCreateService
 from app.registrations.schemas import RegisterUserRequest
 from app.users.schemas import UserCreateResponse
@@ -18,8 +19,12 @@ __all__ = [
 
 class RegistrationService(BaseCreateService):
 
-    def __init__(self, user_service: UserService):
-        super().__init__()
+    def __init__(
+            self,
+            repository: BaseAlchemyRepository,
+            user_service: UserService,
+    ) -> None:
+        super().__init__(repository=repository)
         self.user_service = user_service
 
     async def create_instance(

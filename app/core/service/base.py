@@ -1,7 +1,6 @@
 from typing import (
     Any,
     Generic,
-    TypeVar,
     Iterable,
 )
 from uuid import UUID
@@ -26,13 +25,11 @@ __all__ = [
     'BaseCreateService',
 ]
 
-BaseRepository = TypeVar('BaseRepository', bound=BaseAlchemyRepository)
-
 
 class BaseService:
     _errors_map: dict
 
-    def __init__(self, repository: BaseRepository = None) -> None:
+    def __init__(self, repository: BaseAlchemyRepository) -> None:
         self.repository = repository
 
     async def get_by_id(self, instance_id: UUID | str) -> Maybe[ModelType]:

@@ -10,6 +10,7 @@ from app.carts.router import router as cart_router
 from app.config import settings
 from app.containers.api.providers import (
     AdapterProvider,
+    CacheServiceProvider,
     ServiceProvider,
     RepositoryProvider,
     UtilityProvider,
@@ -39,6 +40,7 @@ def create_app() -> FastAPI:
 
     container = make_async_container(
         AdapterProvider(),
+        CacheServiceProvider(),
         ServiceProvider(),
         RepositoryProvider(),
         UtilityProvider(),

@@ -1,10 +1,13 @@
 import os
 from hashlib import pbkdf2_hmac
-from typing import Iterable
+from typing import (
+    Iterable,
+    LiteralString,
+)
 
 
 class PasswordUtility:
-    hashing_algorithm: str = f'sha256'
+    hashing_algorithm: LiteralString = f'sha256'
 
     def validate_password(
             self,
@@ -29,10 +32,9 @@ class PasswordUtility:
     def generate_salt() -> bytes:
         return os.urandom(32)
 
-    @staticmethod
-    def hash_password(password: str, salt: bytes) -> bytes:
+    def hash_password(self, password: str, salt: bytes) -> bytes:
         return pbkdf2_hmac(
-            hash_name='sha256',
+            hash_name=self.hashing_algorithm,
             password=password.encode(),
             salt=salt,
             iterations=100000,

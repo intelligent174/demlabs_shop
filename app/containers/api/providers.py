@@ -1,8 +1,10 @@
-from providers import (
+from dishka import (
     Provider,
     Scope,
     provide,
 )
+from redis import asyncio as redis
+from redis.asyncio import Redis
 
 from app.auth.service import AuthService
 from app.auth.utils.jwt import JWTUtility
@@ -12,6 +14,7 @@ from app.categories.repository import CategoryRepository
 from app.categories.service import CategoryService
 from app.core.db.base import Database
 from app.config import settings
+from app.products.cache import ProductRedisService
 from app.products.repository import ProductRepository
 from app.products.service import ProductService
 from app.registrations.service import RegistrationService
@@ -21,10 +24,15 @@ from app.users.utils.password import PasswordUtility
 
 
 class AdapterProvider(Provider):
+    scope = Scope.APP
 
-    @provide(scope=Scope.APP)
+    @provide
     async def get_demlabs_shop_db(self) -> Database:
         return Database(settings.db.DSN)
+
+    @provide
+    async def get_redis_db(self) -> Redis:
+        return redis.from_url(str(settings.redis.DSN))
 
 
 class RepositoryProvider(Provider):
@@ -70,8 +78,12 @@ class ServiceProvider(Provider):
         return CartService(repository=repository)
 
     @provide
-    async def get_product_service(self, repository: ProductRepository) -> ProductService:
-        return ProductService(repository=repository)
+    async def get_product_service(
+            self,
+            repository: ProductRepository,
+            cache: ProductRedisService,
+    ) -> ProductService:
+        return ProductService(repository=repository, cache=cache)
 
     @provide
     async def get_registration_service(self, user_service: UserService) -> RegistrationService:
@@ -87,6 +99,14 @@ class ServiceProvider(Provider):
             repository=repository,
             password_utility=password_utility,
         )
+
+
+class CacheServiceProvider(Provider):
+    scope = Scope.REQUEST
+
+    @provide
+    async def get_product_redis_service(self, redis_pool: Redis) -> ProductRedisService:
+        return ProductRedisService(redis_pool=redis_pool)
 
 
 class UtilityProvider(Provider):

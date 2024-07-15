@@ -1,3 +1,5 @@
+from typing import LiteralString
+
 from dishka import FromDishka
 from dishka.integrations.fastapi import inject
 from fastapi import (
@@ -20,7 +22,7 @@ http_bearer = HTTPBearer()
 
 
 class CurrentToken:
-    def __init__(self, token_type: str = 'access'):
+    def __init__(self, token_type: LiteralString = 'access'):
         self.token_type = token_type
 
     @inject

@@ -30,7 +30,7 @@ class BaseAlchemyRepository:
             data: dict,
             is_serialize: bool = True,
             **kwargs: Any,
-    ) -> ModelType:
+    ) -> ModelType:  # TODO: заменить Type Hint!
         """Добавляет запись в БД."""
         stmt = (
             insert(self.model)
@@ -51,7 +51,7 @@ class BaseAlchemyRepository:
             self,
             instance_id: UUID,
             is_serialize: bool = True,
-    ) -> ModelType:
+    ) -> ModelType:  # TODO: заменить Type Hint!
         """Возвращает объект модели по его идентификатору."""
         query = (
             select(self.model)
@@ -67,7 +67,8 @@ class BaseAlchemyRepository:
 
             return self.serialize(instance) if is_serialize else instance
 
-    async def get_list(self, is_serialize: bool = True, **kwargs: Any) -> ResultE[Iterable[ModelType]]:
+    async def get_list(self, is_serialize: bool = True, **kwargs: Any) -> ResultE[
+        Iterable[ModelType]]:  # TODO: заменить Type Hint!
         query = select(self.model)
 
         async with self._db.get_session() as session:

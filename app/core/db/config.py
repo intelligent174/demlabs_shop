@@ -1,5 +1,3 @@
-from typing import Any
-
 from pydantic import (
     Field,
     PostgresDsn,
@@ -49,7 +47,7 @@ class DbSettings(BaseSettings):
     )
 
     model_config = SettingsConfigDict(
-        env_file='.env.local',
+        env_file='.env',
         env_file_encoding='utf-8',
         extra='ignore',
         env_prefix='DB_',
@@ -59,17 +57,17 @@ class DbSettings(BaseSettings):
     @field_validator('DSN')
     def compute_dsn(
             cls,
-            v: Any,
+            v: str,
             values: ValidationInfo,
             **kwargs: object,
-    ) -> str:
+    ) -> PostgresDsn:
         return PostgresDsn.build(  # type: ignore
             scheme='postgresql',
             username=values.data['USER'],
             password=values.data['PASSWORD'],
             host=values.data['HOST'],
             port=values.data['PORT'],
-            path=f"{values.data['NAME']}",
+            path=f'{values.data['NAME']}',
         )
 
 
@@ -82,15 +80,15 @@ class AsyncpgDbSettings(DbSettings):
     @field_validator('DSN')
     def compute_dsn(
             cls,
-            v: Any,
+            v: str,
             values: ValidationInfo,
             **kwargs: object,
-    ) -> Any:
+    ) -> PostgresDsn:
         return PostgresDsn.build(
             scheme='postgresql+asyncpg',
             username=values.data['USER'],
             password=values.data['PASSWORD'],
             host=values.data['HOST'],
             port=values.data['PORT'],
-            path=f"{values.data['NAME']}",
+            path=f'{values.data['NAME']}',
         )

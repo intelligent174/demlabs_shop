@@ -23,7 +23,7 @@ class AppSettings(BaseSettings):
     DEBUG: bool = Field(default=True)
 
     model_config = SettingsConfigDict(
-        env_file='.env.local',
+        env_file='.env',
         env_file_encoding='utf-8',
         extra='ignore',
         env_prefix='APP_',

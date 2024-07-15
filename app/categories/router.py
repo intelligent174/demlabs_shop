@@ -53,7 +53,7 @@ async def create(
     name=f'{name_prefix}:getting_categories',
     response_model=List[CategoryCreateResponse],
 )
-async def get(
+async def get_list(
         service: FromDishka[CategoryService],
 ) -> CustomJSONResponse:
     match await service.get_list():
