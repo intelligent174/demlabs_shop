@@ -32,6 +32,7 @@ class RedisSettings(BaseSettings):
         env_file_encoding='utf-8',
         extra='ignore',
         env_prefix='REDIS_',
+        secrets_dir='/run/secrets',
     )
 
     @field_validator('DSN')

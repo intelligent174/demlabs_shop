@@ -1,10 +1,7 @@
 from typing import Generic
 from uuid import UUID
 
-from orjson.orjson import (
-    dumps,
-    loads,
-)
+from orjson.orjson import loads
 from redis.asyncio import Redis
 from redis.typing import ExpiryT
 
@@ -39,7 +36,7 @@ class BaseRedisService(
     ) -> None:
         await self._redis_pool.set(
             name=self._format_key(key),
-            value=dumps(data),
+            value=data.model_dump_json(),
             ex=expire,
         )
 

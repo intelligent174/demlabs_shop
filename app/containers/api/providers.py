@@ -13,7 +13,10 @@ from app.carts.service import CartService
 from app.categories.repository import CategoryRepository
 from app.categories.service import CategoryService
 from app.core.db.base import Database
-from app.config import settings
+from app.config import (
+    get_settings,
+    Settings,
+)
 from app.products.cache import ProductRedisService
 from app.products.repository import ProductRepository
 from app.products.service import ProductService
@@ -23,15 +26,23 @@ from app.users.service import UserService
 from app.users.utils.password import PasswordUtility
 
 
+class SettingProvider(Provider):
+    scope = Scope.APP
+
+    @provide
+    async def get_settings(self) -> Settings:
+        return get_settings()
+
+
 class AdapterProvider(Provider):
     scope = Scope.APP
 
     @provide
-    async def get_demlabs_shop_db(self) -> Database:
+    async def get_demlabs_shop_db(self, settings: Settings) -> Database:
         return Database(settings.db.DSN)
 
     @provide
-    async def get_redis_db(self) -> Redis:
+    async def get_redis_db(self, settings: Settings) -> Redis:
         return redis.from_url(str(settings.redis.DSN))
 
 
@@ -106,6 +117,7 @@ class CacheServiceProvider(Provider):
 
     @provide
     async def get_product_redis_service(self, redis_pool: Redis) -> ProductRedisService:
+        print(f'{redis_pool=}')
         return ProductRedisService(redis_pool=redis_pool)
 
 
@@ -114,7 +126,7 @@ class UtilityProvider(Provider):
     password_utility = provide(PasswordUtility)
 
     @provide
-    async def get_jwt_utility(self) -> JWTUtility:
+    async def get_jwt_utility(self, settings: Settings) -> JWTUtility:
         return JWTUtility(
             private_secret_key=settings.jwt.PRIVATE_SECRET_KEY,
             public_secret_key=settings.jwt.PUBLIC_SECRET_KEY,

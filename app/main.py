@@ -7,13 +7,14 @@ from fastapi import FastAPI
 from app.auth.router import router as auth_router
 from app.categories.router import router as router_category
 from app.carts.router import router as cart_router
-from app.config import settings
+from app.config import get_settings
 from app.containers.api.providers import (
     AdapterProvider,
     CacheServiceProvider,
     ServiceProvider,
     RepositoryProvider,
     UtilityProvider,
+    SettingProvider,
 )
 from app.products.router import router as router_product
 from app.registrations.router import router as registration_router
@@ -26,6 +27,7 @@ async def lifespan(app: FastAPI):
 
 
 def create_app() -> FastAPI:
+    settings = get_settings()
     app = FastAPI(
         title=settings.app.TITLE,
         debug=settings.app.DEBUG,
@@ -44,6 +46,7 @@ def create_app() -> FastAPI:
         ServiceProvider(),
         RepositoryProvider(),
         UtilityProvider(),
+        SettingProvider(),
     )
     setup_dishka(container, app)
 

@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import jwt
 
 from datetime import (
@@ -33,8 +35,8 @@ class JWTUtility:
 
     def __init__(
             self,
-            public_secret_key: str,
-            private_secret_key: str,
+            public_secret_key: Path,
+            private_secret_key: Path,
             algorithms: list[str],
             access_token_expire_hours: timedelta,
             refresh_token_expire_hours: timedelta,

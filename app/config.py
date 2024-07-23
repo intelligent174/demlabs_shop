@@ -1,3 +1,4 @@
+from functools import lru_cache
 from pathlib import Path
 
 from pydantic import Field
@@ -8,7 +9,8 @@ from app.core.cache.config import RedisSettings
 from app.core.db.config import AsyncpgDbSettings
 
 __all__ = [
-    'settings',
+    'get_settings',
+    'Settings',
 ]
 
 QUANTITY_PATH_ANCESTORS = 2
@@ -38,4 +40,6 @@ class Settings(BaseSettings):
     redis: RedisSettings = RedisSettings()
 
 
-settings = Settings()
+@lru_cache
+def get_settings() -> Settings:
+    return Settings()
