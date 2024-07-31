@@ -7,6 +7,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from app.auth.config import JWTSettings
 from app.core.cache.config import RedisSettings
 from app.core.db.config import AsyncpgDbSettings
+from app.core.middlewares.config import CORSConfigSettings
 
 __all__ = [
     'get_settings',
@@ -35,6 +36,7 @@ class AppSettings(BaseSettings):
 # TODO: переделать под Pydantic 2.
 class Settings(BaseSettings):
     app: AppSettings = AppSettings()
+    cors: CORSConfigSettings = CORSConfigSettings()
     db: AsyncpgDbSettings = AsyncpgDbSettings()
     jwt: JWTSettings = JWTSettings()
     redis: RedisSettings = RedisSettings()

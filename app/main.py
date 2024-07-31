@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from dishka import make_async_container
 from dishka.integrations.fastapi import setup_dishka
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.auth.router import router as auth_router
 from app.categories.router import router as router_category
@@ -33,6 +34,16 @@ def create_app() -> FastAPI:
         debug=settings.app.DEBUG,
         lifespan=lifespan,
     )
+
+    # Middlewares
+    app.add_middleware(
+        CORSMiddleware,  # noqa
+        allow_origins=settings.cors.ALLOW_ORIGINS,
+        allow_credentials=settings.cors.ALLOW_CREDENTIALS,
+        allow_methods=settings.cors.ALLOW_METHODS,
+        allow_headers=settings.cors.ALLOW_HEADERS,
+    )
+
     # Router...
     app.include_router(registration_router)
     app.include_router(auth_router)
@@ -40,6 +51,11 @@ def create_app() -> FastAPI:
     app.include_router(router_product)
     app.include_router(cart_router)
 
+    return app
+
+
+def create_production_app() -> FastAPI:
+    app = create_app()
     container = make_async_container(
         AdapterProvider(),
         CacheServiceProvider(),
