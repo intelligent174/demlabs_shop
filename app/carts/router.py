@@ -26,7 +26,7 @@ router = APIRouter(
 
 @router.post(
     '/carts/',
-    name=f'{name_prefix}:creating_cart',
+    name=f'{name_prefix}:create',
     response_model=CartCreateResponse,
 )
 async def create(

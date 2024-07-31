@@ -117,7 +117,6 @@ class CacheServiceProvider(Provider):
 
     @provide
     async def get_product_redis_service(self, redis_pool: Redis) -> ProductRedisService:
-        print(f'{redis_pool=}')
         return ProductRedisService(redis_pool=redis_pool)
 
 

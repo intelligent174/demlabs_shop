@@ -4,6 +4,7 @@ from returns.result import (
     Result,
 )
 
+from app.auth.schemas import AuthTokensPairResponse
 from app.users.schemas import UserCreateResponse
 from app.auth.utils.jwt import JWTUtility
 from app.users.service import UserService
@@ -23,7 +24,7 @@ class AuthService:
         self.user_service = user_service
         self.jwt_utility = jwt_utility
 
-    async def login_phone(self, user: UserCreateResponse):
+    async def login_phone(self, user: UserCreateResponse) -> Success[AuthTokensPairResponse]:
         match await self.jwt_utility.generate_tokens_pair(
             user=user,
             exclude_fields={'date_of_birth', 'created_at', 'updated_at'},

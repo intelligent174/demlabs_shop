@@ -20,15 +20,15 @@ class Database:
             dsn_url: str,
             echo: bool = False,
     ) -> None:
-        self._async_engine = create_async_engine(
-            url=str(dsn_url),
+        self.async_engine = create_async_engine(
+            url=dsn_url,
             future=True,
             echo=echo,
         )
         self._async_session_factory = async_sessionmaker(
             autocommit=False,
             autoflush=False,
-            bind=self._async_engine,
+            bind=self.async_engine,
             class_=AsyncSession,
             expire_on_commit=False
         )

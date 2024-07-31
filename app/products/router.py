@@ -33,7 +33,7 @@ router = APIRouter(
 
 @router.post(
     '/products/',
-    name=f'{name_prefix}:creating_products',
+    name=f'{name_prefix}:create',
     response_model=ProductCreateResponse,
 )
 async def create(
@@ -52,7 +52,7 @@ async def create(
 
 @router.get(
     '/products/{product_id:uuid}/',
-    name=f'{name_prefix}:getting_product',
+    name=f'{name_prefix}:read',
     response_model=ProductCreateResponse,
 )
 async def get(
@@ -70,7 +70,7 @@ async def get(
 
 @router.get(
     '/products/{category_id:uuid}',
-    name=f'{name_prefix}:getting_products',
+    name=f'{name_prefix}:list',
     response_model=List[BaseProductResponse],
 )
 async def get_list(

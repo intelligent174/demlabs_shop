@@ -31,7 +31,7 @@ router = APIRouter(
 
 @router.post(
     '/categories/',
-    name=f'{name_prefix}:creating_categories',
+    name=f'{name_prefix}:create',
     response_model=CategoryCreateResponse,
 )
 async def create(
@@ -50,7 +50,7 @@ async def create(
 
 @router.get(
     '/categories/',
-    name=f'{name_prefix}:getting_categories',
+    name=f'{name_prefix}:list',
     response_model=List[CategoryCreateResponse],
 )
 async def get_list(

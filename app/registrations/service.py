@@ -21,8 +21,8 @@ class RegistrationService(BaseCreateService):
 
     def __init__(
             self,
-            repository: BaseAlchemyRepository,
             user_service: UserService,
+            repository: BaseAlchemyRepository = None,
     ) -> None:
         super().__init__(repository=repository)
         self.user_service = user_service

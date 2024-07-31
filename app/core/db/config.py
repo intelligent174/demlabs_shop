@@ -58,4 +58,4 @@ class AsyncpgDbSettings(BaseSettings):
             host=values.data['HOST'],
             port=values.data['PORT'],
             path=f'{values.data['DB']}',
-        )
+        ).unicode_string()

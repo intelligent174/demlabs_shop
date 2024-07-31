@@ -21,8 +21,18 @@ returns = "^0.23.0"
 pydantic = {extras = ["email"], version = "^2.8.2"}
 pyjwt = {extras = ["crypto"], version = "^2.8.0"}
 redis = "^5.0.7"
+pytest = "^8.3.1"
+pytest-asyncio = "^0.23.8"
+polyfactory = "^2.16.2"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+# TODO: настроить полностью pytest.
+[tool.pytest.ini_options]
+pythonpath = [
+  ".", "app",
+]
+asyncio_mode="auto"
